@@ -1,94 +1,124 @@
-// Satın Alma Sayfası
 document.addEventListener("DOMContentLoaded", () => {
-    const productDetailsContainer = document.querySelector(".product-details");
-    const storedProduct = JSON.parse(localStorage.getItem("selectedProduct"));
+    const productDetails = JSON.parse(localStorage.getItem("selectedProduct"));
 
-    if (storedProduct) {
-        const productImage = storedProduct.photo ? storedProduct.photo : "default-image.jpg";
+    if (productDetails) {
+        document.getElementById("product-image").src = productDetails.photo || "default-image.jpg";
+        document.getElementById("product-name").textContent = productDetails.name || "Ürün Adı";
+        document.getElementById("product-price").textContent = `Fiyat: ${productDetails.price}₺`;
 
-        productDetailsContainer.innerHTML = `
-            <div class="product-image">
-                <img src="${productImage}" alt="${storedProduct.name}">
-            </div>
-            <div class="product-info">
-                <h2>${storedProduct.name}</h2>
-                <p><strong>Kategori:</strong> ${storedProduct.category}</p>
-                <p><strong>Fiyat:</strong> ${storedProduct.price}₺</p>
-                ${
-                    storedProduct.discountPrice
-                        ? `<p><strong>İndirimli Fiyat:</strong> ${storedProduct.discountPrice}₺</p>`
-                        : ""
-                }
-                <p><strong>Açıklama:</strong> ${storedProduct.description || "Açıklama bulunmamaktadır."}</p>
-            </div>
-        `;
-    } else {
-        productDetailsContainer.innerHTML = `<p>Ürün bilgisi bulunamadı.</p>`;
+        const discountPriceElement = document.getElementById("product-discount-price");
+        if (productDetails.discountPrice) {
+            discountPriceElement.textContent = `İndirimli Fiyat: ${productDetails.discountPrice}₺`;
+        } else {
+            discountPriceElement.style.display = "none";
+        }
+
+        document.getElementById("product-description").textContent = productDetails.description || "Ürün açıklaması burada görünecek.";
     }
+});
 
-    // Ödeme Popup
-    const buyNowButton = document.getElementById("buyNow");
-    const paymentModal = document.getElementById("paymentModal");
-    const closeModal = document.querySelector(".close");
+// Sepet verileri
+let basket = JSON.parse(localStorage.getItem("basket")) || [];
+updateBasketUI();
 
-    buyNowButton.addEventListener("click", () => {
-        paymentModal.style.display = "block";
+// Sepete ürün ekle
+document.getElementById("add-to-basket").addEventListener("click", () => {
+    const productDetails = JSON.parse(localStorage.getItem("selectedProduct"));
+
+    if (productDetails) {
+        basket.push(productDetails);
+        localStorage.setItem("basket", JSON.stringify(basket));
+        updateBasketUI();
+        alert("Ürün sepete eklendi!");
+    }
+});
+
+// Sepeti güncelle
+function updateBasketUI() {
+    const basketList = document.getElementById("basket-list");
+    const totalPriceElement = document.getElementById("total-price");
+
+    basketList.innerHTML = "";
+    let totalPrice = 0;
+
+    basket.forEach((product, index) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `
+            <span>${product.name} - ${product.discountPrice || product.price}₺</span>
+            <button class="remove-item" data-index="${index}">Kaldır</button>
+        `;
+        basketList.appendChild(listItem);
+
+        totalPrice += parseFloat(product.discountPrice || product.price);
     });
 
-    closeModal.addEventListener("click", () => {
+    totalPriceElement.textContent = `Toplam Tutar: ${totalPrice.toFixed(2)}₺`;
+
+    // Sepetten ürün kaldır
+    document.querySelectorAll(".remove-item").forEach((button) => {
+        button.addEventListener("click", (e) => {
+            const index = e.target.getAttribute("data-index");
+            basket.splice(index, 1);
+            localStorage.setItem("basket", JSON.stringify(basket));
+            updateBasketUI();
+        });
+    });
+}
+
+// Ödeme popup'ını yönet
+const paymentModal = document.getElementById("paymentModal");
+const checkoutButton = document.getElementById("checkout");
+const closeModal = document.querySelector(".close");
+
+// Ödeme popup'ını aç
+checkoutButton.addEventListener("click", () => {
+    if (basket.length === 0) {
+        alert("Sepetiniz boş. Lütfen ürün ekleyin!");
+        return;
+    }
+    paymentModal.style.display = "block";
+});
+
+// Ödeme popup'ını kapat
+closeModal.addEventListener("click", () => {
+    paymentModal.style.display = "none";
+});
+
+// Ödeme işlemini tamamla
+document.getElementById("paymentForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // Kullanıcıdan alınan bilgileri işleme
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const address = document.getElementById("address").value;
+
+    if (name && phone && address) {
+        alert("Ödeme başarılı! Siparişiniz alındı.");
+
+        // Alınan ürünleri profile kaydet
+        basket.forEach((product) => saveToProfile(product));
+
+        // Sepeti sıfırla
+        basket = [];
+        localStorage.setItem("basket", JSON.stringify(basket));
+        updateBasketUI();
         paymentModal.style.display = "none";
-    });
+    } else {
+        alert("Lütfen tüm bilgileri doldurun.");
+    }
+});
 
-    window.addEventListener("click", (e) => {
-        if (e.target === paymentModal) {
-            paymentModal.style.display = "none";
-        }
-    });
+// Profil sayfasına ürün kaydet
+function saveToProfile(product) {
+    const profileProducts = JSON.parse(localStorage.getItem("purchasedProducts")) || [];
+    profileProducts.push(product);
+    localStorage.setItem("purchasedProducts", JSON.stringify(profileProducts));
+}
 
-    // Ödeme Tamamlama
-    const checkoutButton = document.getElementById("checkout");
-    checkoutButton.addEventListener("click", (e) => {
-        e.preventDefault();
-
-        // Form bilgileri
-        const name = document.getElementById("name").value;
-        const phone = document.getElementById("phone").value;
-        const address = document.getElementById("address").value;
-        const cardNumber = document.getElementById("cardNumber").value;
-        const expiryMonth = document.getElementById("expiryMonth").value;
-        const expiryYear = document.getElementById("expiryYear").value;
-        const cvv = document.getElementById("cvv").value;
-
-        // Form doğrulama
-        if (!name || !phone || !address || !cardNumber || !expiryMonth || !expiryYear || !cvv) {
-            alert("Lütfen tüm alanları doldurun!");
-            return;
-        }
-
-        alert("Ödeme başarılı! Siparişiniz alınmıştır.");
+// Modal dışında tıklanınca kapatma
+window.addEventListener("click", (e) => {
+    if (e.target === paymentModal) {
         paymentModal.style.display = "none";
-    });
-    
-
-    document.getElementById("checkout").addEventListener("click", (e) => {
-        e.preventDefault(); // Sayfanın yenilenmesini engeller
-    
-        const selectedProduct = JSON.parse(localStorage.getItem("selectedProduct"));
-    
-        if (!selectedProduct) {
-            alert("Ürün bilgisi bulunamadı!");
-            return;
-        }
-    
-        // Satın alınan ürünleri kaydet
-        const purchasedProducts = JSON.parse(localStorage.getItem("purchasedProducts")) || [];
-        purchasedProducts.push(selectedProduct);
-        localStorage.setItem("purchasedProducts", JSON.stringify(purchasedProducts));
-    
-        alert("Ödeme başarıyla tamamlandı! Ürün profilinize eklendi.");
-        window.location.href = "profile.html"; // Profil sayfasına yönlendirme
-    });
-    
-
-
+    }
 });

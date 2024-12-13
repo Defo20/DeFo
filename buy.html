@@ -16,11 +16,21 @@
 
     <div class="product-details-container">
         <div class="product-details">
-            <!-- Ürün detayları buy.js tarafından doldurulacak -->
+            <h1 id="product-name">Ürün Adı</h1>
+            <img id="product-image" src="" alt="Ürün Görseli">
+            <p id="product-price">Fiyat: </p>
+            <p id="product-discount-price"></p>
+            <p id="product-description">Ürün açıklaması buraya gelecek.</p>
+            <button id="add-to-basket" class="add-to-basket-btn">Sepete Ekle</button>
+        </div>
+
+        <div class="basket">
+            <h2>Sepetim</h2>
+            <ul id="basket-list"></ul>
+            <p id="total-price">Toplam Tutar: 0₺</p>
+            <button id="checkout" class="checkout-btn">Satın Al</button>
         </div>
     </div>
-
-    <button id="buyNow" class="buy-now-btn">Hemen Satın Al</button>
 
     <!-- Ödeme Popup -->
     <div id="paymentModal" class="modal">

@@ -40,85 +40,97 @@ nav a:hover {
     text-align: center;
     margin-bottom: 20px;
 }
-
-/* Form Stilleri */
 form {
-    margin-bottom: 20px;
+    background: white;
+    padding: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 form label {
     display: block;
-    margin-bottom: 5px;
+    font-size: 16px;
     font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff3f3;
 }
 
-form input {
+form input[type="text"],
+form input[type="number"],
+form input[type="file"],
+form select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
 }
 
-/* Kaydet Butonu */
-#submitProduct {
-    width: 100%;
-    background: #007bff;
-    color: #fff;
-    padding: 10px;
+form input[type="text"]:focus,
+form input[type="number"]:focus,
+form select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+form button {
+    background-color: #285da7;
+    color: rgb(255, 255, 255);
+    padding: 10px 15px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
-#submitProduct:hover {
-    background: #0056b3;
+form button:hover {
+    background-color: #213788;
 }
 
-/* Ürün Listesi */
-#productList {
-    margin-top: 20px;
-}
-
-#productList h2 {
-    margin-bottom: 10px;
-}
-
-#productList ul {
-    list-style: none;
-    padding: 0;
-}
-
-#productList li {
+.product-list {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #fff;
-    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.product-item {
+    border: 1px solid #000000;
+    border-radius: 8px;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    background: rgb(255, 255, 255);
+    width: 220px; /* Kart genişliği */
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-#productList img {
-    border-radius: 5px;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    margin-right: 10px;
+.product-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Sil Butonu */
-.delete-button {
-    background: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
+.product-item img {
+    max-width: 100%;
+    height: auto;
     border-radius: 5px;
-    cursor: pointer;
+    margin-bottom: 10px;
 }
 
-.delete-button:hover {
-    background: #c82333;
+.product-item h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.product-item p {
+    font-size: 14px;
+    color: #ff0000;
+    margin: 5px 0;
 }
