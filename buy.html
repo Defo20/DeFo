@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satın Alma Sayfası</title>
+    <link rel="stylesheet" href="buy.css">
+</head>
+<body>
+    <nav>
+        <a href="profile.html">Profil</a>
+        <a href="sell.html">Satış Yap</a>
+        <a href="main.html">Ürün Listesi</a>
+        <a href="buy.html">Satın Alma</a>
+    </nav>
+
+    <div class="product-details-container">
+        <div class="product-details">
+            <!-- Ürün detayları buy.js tarafından doldurulacak -->
+        </div>
+    </div>
+
+    <button id="buyNow" class="buy-now-btn">Hemen Satın Al</button>
+
+    <!-- Ödeme Popup -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Ödeme Bilgileri</h2>
+            <form id="paymentForm">
+                <div>
+                    <label for="name">Ad ve Soyad:</label>
+                    <input type="text" id="name" placeholder="Adınızı ve Soyadınızı Girin" required>
+                </div>
+                <div>
+                    <label for="phone">Telefon Numarası:</label>
+                    <input type="text" id="phone" placeholder="Telefon Numaranızı Girin" required>
+                </div>
+                <div>
+                    <label for="address">Adres:</label>
+                    <textarea id="address" placeholder="Adresinizi Girin" required></textarea>
+                </div>
+                <div>
+                    <label for="cardNumber">Kart Numarası:</label>
+                    <input type="text" id="cardNumber" placeholder="Kart Numaranızı Girin" required>
+                </div>
+                <div class="card-info">
+                    <div>
+                        <label for="expiryMonth">Ay:</label>
+                        <input type="text" id="expiryMonth" placeholder="MM" required>
+                    </div>
+                    <div>
+                        <label for="expiryYear">Yıl:</label>
+                        <input type="text" id="expiryYear" placeholder="YYYY" required>
+                    </div>
+                    <div>
+                        <label for="cvv">CVV:</label>
+                        <input type="text" id="cvv" placeholder="CVV" required>
+                    </div>
+                </div>
+                <button id="checkout" type="submit" class="checkout-btn">Ödeme Yap</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="buy.js"></script>
+</body>
+</html>
