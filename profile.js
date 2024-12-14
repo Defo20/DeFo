@@ -3,28 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const airtableApiKey = "pat81c3ZkZKYh8ToY"; // Airtable Personal Access Token
     const baseId = "appGioPVG9j8tP0dX"; // Airtable Base ID
     const tableName = "Profil"; // Airtable'daki tablo adınız
-    (async () => {
-    const airtableApiKey = "pat81c3ZkZKYh8ToY";
-    const baseId = "appGioPVG9j8tP0dX";
-    const tableName = "Profil";
-
-    try {
-        const response = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`, {
-            headers: {
-                "Authorization": `Bearer ${airtableApiKey}`,
-            },
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log("Airtable API başarılı:", data);
-        } else {
-            console.error("Hata:", await response.json());
-        }
-    } catch (error) {
-        console.error("Fetch hatası:", error);
-    }
-})();
 
     // HTML elementlerini seçiyoruz
     const nameInput = document.getElementById("name");
