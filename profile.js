@@ -1,21 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Airtable bilgileriniz
-    const airtableApiKey = "patBeZrQ0Q0au4viK.8b7adc0991a3686a608b08f01e7980d489def9bf813569f1eda39a7405b30a44"; // Airtable Personal Access Token
-    const baseId = "appGioPVG9j8tP0dX"; // Airtable Base ID
-    const tableName = "Profil"; // Airtable'daki tablo adınız
+    const airtableApiKey = "patYOUR_ACCESS_TOKEN"; // Airtable Personal Access Token
+    const baseId = "appYOUR_BASE_ID"; // Airtable Base ID
+    const tableName = "YOUR_TABLE_NAME"; // Airtable'daki tablo adı
 
     // HTML elementlerini seçiyoruz
     const nameInput = document.getElementById("name");
     const emailInput = document.getElementById("email");
     const phoneInput = document.getElementById("phone");
-    const profilePhotoInput = document.getElementById("profilePhoto");
     const saveButton = document.getElementById("saveProfile");
-
-    // Kaydedilen bilgilerin görüntüleneceği alanlar
-    const savedName = document.getElementById("savedName");
-    const savedEmail = document.getElementById("savedEmail");
-    const savedPhone = document.getElementById("savedPhone");
-    const savedPhoto = document.getElementById("savedPhoto");
 
     // "Kaydet" butonuna tıklandığında çalışan işlev
     saveButton.addEventListener("click", async () => {
@@ -23,28 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const name = nameInput.value;
         const email = emailInput.value;
         const phone = phoneInput.value;
-        const profilePhoto = profilePhotoInput.files[0];
-
-        // Profil fotoğrafını yükleme işlemi
-        let profilePhotoUrl = null;
-        if (profilePhoto) {
-            // Airtable'da fotoğraf yüklemek için önce dosyayı bir URL'ye yüklemeniz gerekir
-            // Bunun için bir dosya barındırma hizmeti kullanabilirsiniz
-            // Ancak doğrudan base64 ile Airtable'a yükleme yapamayız
-            // Bu nedenle, fotoğraf yükleme işlemini atlıyoruz veya boş bırakıyoruz
-            alert("Profil fotoğrafı yükleme özelliği şu anda desteklenmemektedir.");
-        }
 
         // Airtable API'ye gönderilecek veriler
         const data = {
             records: [
                 {
                     fields: {
-                        Name: name,
-                        Email: email,
-                        Phone: phone,
-                        // Eğer fotoğraf URL'si varsa ekleyin
-                        ...(profilePhotoUrl && { "Profile Photo": [{ url: profilePhotoUrl }] })
+                        Name: name,       // Airtable'da "Name" kolonuna kaydedilir
+                        Email: email,     // Airtable'da "Email" kolonuna kaydedilir
+                        Phone: phone,     // Airtable'da "Phone" kolonuna kaydedilir
                     },
                 },
             ],
@@ -62,60 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (response.ok) {
-                alert("Kullanıcı başarıyla kaydedildi!");
+                alert("Yeni satır başarıyla Airtable'a eklendi!");
                 const result = await response.json();
-                console.log("Kaydedilen veri:", result);
-
-                // Kaydedilen bilgileri sayfada gösterme
-                displaySavedProfile(name, email, phone, profilePhotoUrl);
+                console.log("Eklenen satır:", result);
             } else {
-                alert("Kayıt sırasında bir hata oluştu.");
                 const errorDetails = await response.json();
-                console.error("Hata detayları:", errorDetails);
+                console.error("Airtable API Hatası:", errorDetails);
+                alert(`Hata: ${errorDetails.error.message}`);
             }
         } catch (error) {
-            console.error("Airtable'a bağlanırken bir hata oluştu:", error);
+            console.error("API'ye bağlanırken bir hata oluştu:", error);
             alert("Kayıt sırasında bir hata oluştu.");
         }
     });
-
-    // Kaydedilen bilgileri sayfada gösterme işlevi
-    function displaySavedProfile(name, email, phone, photoUrl) {
-        savedName.textContent = name || "[Adınız]";
-        savedEmail.textContent = email || "[Email]";
-        savedPhone.textContent = phone || "[Telefon]";
-
-        if (photoUrl) {
-            savedPhoto.src = photoUrl;
-            savedPhoto.style.display = "block";
-        } else {
-            savedPhoto.style.display = "none";
-        }
-    }
-
-    // Sayfa yüklendiğinde Airtable'dan en son kaydı çekme ve gösterme (isteğe bağlı)
-    async function fetchLatestProfile() {
-        try {
-            const response = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}?sort[0][field]=Created&sort[0][direction]=desc&maxRecords=1`, {
-                headers: {
-                    "Authorization": `Bearer ${airtableApiKey}`,
-                },
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data.records.length > 0) {
-                    const record = data.records[0].fields;
-                    displaySavedProfile(record.Name, record.Email, record.Phone, record["Profile Photo"] ? record["Profile Photo"][0].url : null);
-                }
-            } else {
-                console.error("Kayıtlı veriler alınamadı.");
-            }
-        } catch (error) {
-            console.error("Airtable'dan veri alınırken bir hata oluştu:", error);
-        }
-    }
-
-    // Sayfa yüklendiğinde en son kaydı çekme (isteğe bağlı)
-    fetchLatestProfile();
 });
