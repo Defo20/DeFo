@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Airtable bilgileriniz
     const airtableApiKey = "patBeZrQ0Q0au4viK.8b7adc0991a3686a608b08f01e7980d489def9bf813569f1eda39a7405b30a44"; // Airtable Personal Access Token
     const baseId = "appGioPVG9j8tP0dX"; // Airtable Base ID
-    const tableName = "Profil"; // Airtable'daki tablo adı
+    const tableName = "Profil"; // Airtable Tablo Adı
+
+    // Proxy URL'si (CORS Anywhere)
+    const proxy = "https://cors-anywhere.herokuapp.com/";
 
     // HTML elementlerini seçiyoruz
     const nameInput = document.getElementById("name");
@@ -12,27 +14,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // "Kaydet" butonuna tıklandığında çalışan işlev
     saveButton.addEventListener("click", async () => {
-        // Kullanıcıdan alınan form verileri
         const name = nameInput.value;
         const email = emailInput.value;
         const phone = phoneInput.value;
 
-        // Airtable API'ye gönderilecek veriler
         const data = {
             records: [
                 {
                     fields: {
-                        Name: name,       // Airtable'da "Name" kolonuna kaydedilir
-                        Email: email,     // Airtable'da "Email" kolonuna kaydedilir
-                        Phone: phone,     // Airtable'da "Phone" kolonuna kaydedilir
+                        Name: name,
+                        Email: email,
+                        Phone: phone,
                     },
                 },
             ],
         };
 
-        // Airtable'a POST isteği gönderiyoruz
         try {
-            const response = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`, {
+            const response = await fetch(`${proxy}https://api.airtable.com/v0/${baseId}/${tableName}`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${airtableApiKey}`,
@@ -42,17 +41,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (response.ok) {
-                alert("Yeni satır başarıyla Airtable'a eklendi!");
+                alert("Kullanıcı başarıyla kaydedildi!");
                 const result = await response.json();
-                console.log("Eklenen satır:", result);
+                console.log("Eklenen kayıt:", result);
             } else {
                 const errorDetails = await response.json();
                 console.error("Airtable API Hatası:", errorDetails);
                 alert(`Hata: ${errorDetails.error.message}`);
             }
         } catch (error) {
-            console.error("API'ye bağlanırken bir hata oluştu:", error);
-            alert("Kayıt sırasında bir hata oluştu.");
+            console.error("CORS Anywhere Proxy Hatası:", error);
+            alert("Bir hata oluştu.");
         }
     });
 });
