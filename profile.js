@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Airtable bilgileriniz
-    const airtableApiKey =pat81c3ZkZKYh8ToY; // Airtable Personal Access Token
+    const airtableApiKey = "pat81c3ZkZKYh8ToY"; // Airtable Personal Access Token
     const baseId = "appGioPVG9j8tP0dX"; // Airtable Base ID
     const tableName = "Profil"; // Airtable'daki tablo adınız
 
