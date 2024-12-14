@@ -1,10 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const airtableApiKey = "patBeZrQ0Q0au4viK.8b7adc0991a3686a608b08f01e7980d489def9bf813569f1eda39a7405b30a44"; // Airtable Personal Access Token
-    const baseId = "appGioPVG9j8tP0dX"; // Airtable Base ID
-    const tableName = "Profil"; // Airtable Tablo Adı
-
-    // Proxy URL'si (CORS Anywhere)
-    const proxy = "https://cors-anywhere.herokuapp.com/";
+    // Backend URL'nizi buraya ekleyin
+    const backendUrl = "https://backend-jet-iota.vercel.app/api/airtable"; // Vercel Backend URL
 
     // HTML elementlerini seçiyoruz
     const nameInput = document.getElementById("name");
@@ -31,10 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch(`${proxy}https://api.airtable.com/v0/${baseId}/${tableName}`, {
+            const response = await fetch(backendUrl, {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${airtableApiKey}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
@@ -44,14 +39,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Kullanıcı başarıyla kaydedildi!");
                 const result = await response.json();
                 console.log("Eklenen kayıt:", result);
+
+                // Kaydedilen bilgileri sayfada gösterme
+                displaySavedProfile(name, email, phone);
             } else {
                 const errorDetails = await response.json();
-                console.error("Airtable API Hatası:", errorDetails);
+                console.error("Backend Hatası:", errorDetails);
                 alert(`Hata: ${errorDetails.error.message}`);
             }
         } catch (error) {
-            console.error("CORS Anywhere Proxy Hatası:", error);
+            console.error("Backend bağlantı hatası:", error);
             alert("Bir hata oluştu.");
         }
     });
+
+    // Kaydedilen bilgileri sayfada gösterme
+    function displaySavedProfile(name, email, phone) {
+        document.getElementById("savedName").textContent = name || "[Adınız]";
+        document.getElementById("savedEmail").textContent = email || "[Email]";
+        document.getElementById("savedPhone").textContent = phone || "[Telefon]";
+    }
 });
