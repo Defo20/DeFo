@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
     <link rel="stylesheet" href="profile.css">
+    <!-- Content Security Policy eklendi -->
+    <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://api.airtable.com">
 </head>
 <body>
     <nav>
@@ -25,10 +27,7 @@
             <input type="email" id="email" placeholder="Emailinizi Girin" required><br>
             
             <label for="phone">Telefon:</label>
-            <input type="text" id="phone" placeholder="Telefon Numaranızı Girin"><br>
-            
-            <label for="profilePhoto">Profil Fotoğrafı:</label>
-            <input type="file" id="profilePhoto" accept="image/*"><br><br>
+            <input type="text" id="phone" placeholder="Telefon Numaranızı Girin"><br><br>
             
             <button type="button" id="saveProfile">Kaydet</button>
         </form>
@@ -39,7 +38,6 @@
             <p><strong>Ad:</strong> <span id="savedName">[Adınız]</span></p>
             <p><strong>Email:</strong> <span id="savedEmail">[Email]</span></p>
             <p><strong>Telefon:</strong> <span id="savedPhone">[Telefon]</span></p>
-            <img id="savedPhoto" src="" alt="Profil Fotoğrafı" style="display:none; width:100px; height:100px;">
         </div>
     </div>
     
