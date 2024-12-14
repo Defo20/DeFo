@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Backend URL'nizi buraya ekleyin
-    const backendUrl = "backend-jet-iota.vercel.app"; // Vercel Backend URL
+    const backendUrl = "https://backend-jet-iota.vercel.app/?vercelToolbarCode=4NvBv9EEqexMZq_"; // Vercel Backend URL
 
     // HTML elementlerini seçiyoruz
     const nameInput = document.getElementById("name");
