@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Backend URL'nizi buraya ekleyin
-    const backendUrl = "https://backend-jet-iota.vercel.app/api/airtable"; // Vercel Backend URL
+    const backendUrl = "backend-jet-iota.vercel.app"; // Vercel Backend URL
 
     // HTML elementlerini seçiyoruz
     const nameInput = document.getElementById("name");
